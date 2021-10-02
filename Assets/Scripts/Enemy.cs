@@ -2,37 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ScriptableObjectArchitecture;
+using Pathfinding;
 
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
     private FloatGameEvent AttackPlayerEvent;
 
+
     private Transform player_position;
 
     private Vector2 enemyVector2;
     private Vector2 playerVector2;
 
+    // STATS
     private float min_moveSpeed = 1.7f;
     private float max_moveSpeed = 3.7f;
 
-    private float moveSpeed;
     private float attackRange = 1.5f;
     private float attackSpeed = 0.5f;
     private float attackDamage = 3f;
 
+    /////////
+
     private bool canAttack = true;
     private bool X_direction;
 
+
+
+    private AIDestinationSetter destination;
+    private AIPath AI;
+
     void Awake()
     {
+        destination = GetComponent<AIDestinationSetter>();
+        AI = GetComponent<AIPath>();
         player_position = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+
+        destination.target = player_position;
+        AI.maxSpeed = Random.Range(min_moveSpeed, max_moveSpeed);
+
     }
     
-    void Start()
-    {
-        moveSpeed = Random.Range(min_moveSpeed, max_moveSpeed);
-    }
 
     void Update()
     {
@@ -41,13 +52,18 @@ public class Enemy : MonoBehaviour
 
         if(Vector2.Distance(enemyVector2, playerVector2) > attackRange)
         {
-            transform.position = Vector2.MoveTowards(transform.position, player_position.position, moveSpeed * Time.deltaTime);
+            //transform.position = Vector2.MoveTowards(transform.position, player_position.position, moveSpeed * Time.deltaTime);
+            AI.canMove = true;
         }
-        else if(canAttack)
+        else
         {
-            canAttack = false;
-            StartCoroutine(attackWait(attackSpeed));
-            Attack();
+            AI.canMove = false;
+            if(canAttack)
+            {
+                canAttack = false;
+                StartCoroutine(attackWait(attackSpeed));
+                Attack();
+            }
         }
 
 
