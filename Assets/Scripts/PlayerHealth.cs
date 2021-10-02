@@ -17,11 +17,11 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
-        
+        Debug.Log(Health);
     }
 
     public void GetDamage(float damage)
     {
-
+        Health -= damage;
     }
 }

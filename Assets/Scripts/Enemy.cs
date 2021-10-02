@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ScriptableObjectArchitecture;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField]
+    private FloatGameEvent AttackPlayerEvent;
+
     private Transform player_position;
 
     private Vector2 enemyVector2;
@@ -11,7 +15,8 @@ public class Enemy : MonoBehaviour
 
     private float moveSpeed = 3f;
     private float attackRange = 1.5f;
-    private float attackSpeed = 1f;
+    private float attackSpeed = 0.5f;
+    private float attackDamage = 3f;
 
     private bool canAttack = true;
     private bool X_direction;
@@ -57,8 +62,10 @@ public class Enemy : MonoBehaviour
         canAttack = true;
     }
 
+
     void Attack()
     {
         Debug.Log("Attack!");
+        AttackPlayerEvent.Raise(attackDamage);
     }
 }

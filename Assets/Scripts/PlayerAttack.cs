@@ -22,7 +22,7 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetAxisRaw("Fire1") == 1 && canAttack)
+        if((Input.GetAxisRaw("Fire1") == 1 || Input.GetKey(KeyCode.Space)) && canAttack)
         {
             canAttack = false;
             StartCoroutine(attackWait(attackSpeed));
