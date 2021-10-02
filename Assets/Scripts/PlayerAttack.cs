@@ -5,13 +5,19 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
 
+    public LayerMask Enemy_Layer;
+    public Transform HitZone;
+
     private Animator animator;
+    private int previousHorizontal;
+    private int previousVertical;
 
     private bool canAttack = true;
 
     // STATS
 
-    private float attackSpeed = 1;
+    private float attackSpeed = 1f;
+    private float attackRange = 1.5f;
 
     ////////
 
@@ -22,6 +28,27 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
+        previousHorizontal = ((int)animator.GetFloat("previous_Horizontal"));
+        previousVertical = ((int)animator.GetFloat("previous_Vertical"));
+
+        if(previousVertical == 1)
+        {
+            HitZone.localPosition = new Vector2(0f, 0.5f);
+        }
+        else if(previousVertical == -1)
+        {
+            HitZone.localPosition = new Vector2(0f, -0.76f);
+        }
+        else if(previousHorizontal == 1)
+        {
+            HitZone.localPosition = new Vector2(0.67f, -0.2f);
+        }
+        else if(previousHorizontal == -1)
+        {
+            HitZone.localPosition = new Vector2(-0.67f, -0.2f);
+        }
+
+
         if((Input.GetAxisRaw("Fire1") == 1 || Input.GetKey(KeyCode.Space)) && canAttack)
         {
             canAttack = false;
@@ -39,5 +66,19 @@ public class PlayerAttack : MonoBehaviour
     void Attack()
     {
         animator.SetTrigger("Attack");
+        Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(HitZone.position, attackRange/6, Enemy_Layer);
+        if(enemiesHit.Length > 0)
+        {
+            foreach(Collider2D enemy in enemiesHit)
+            {
+                Destroy(enemy.gameObject);
+            }
+        }
+
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(HitZone.position, attackRange/6);
     }
 }

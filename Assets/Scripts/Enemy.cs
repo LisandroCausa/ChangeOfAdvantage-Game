@@ -13,7 +13,10 @@ public class Enemy : MonoBehaviour
     private Vector2 enemyVector2;
     private Vector2 playerVector2;
 
-    private float moveSpeed = 3f;
+    private float min_moveSpeed = 1.7f;
+    private float max_moveSpeed = 3.7f;
+
+    private float moveSpeed;
     private float attackRange = 1.5f;
     private float attackSpeed = 0.5f;
     private float attackDamage = 3f;
@@ -24,6 +27,11 @@ public class Enemy : MonoBehaviour
     void Awake()
     {
         player_position = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+    }
+    
+    void Start()
+    {
+        moveSpeed = Random.Range(min_moveSpeed, max_moveSpeed);
     }
 
     void Update()
