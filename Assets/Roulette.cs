@@ -43,7 +43,7 @@ public class Roulette : MonoBehaviour
 
     IEnumerator spinCoroutine()
     {
-        for(int i = 0; i < 21; i++)
+        for(int i = 0; i < 23; i++)
         {
             do
             {
@@ -55,15 +55,6 @@ public class Roulette : MonoBehaviour
             yield return new WaitForSeconds(0.10f);
         }
 
-        /*if(Random.Range(0,2) == 0)
-        {
-            // Bad
-            border.color = curses_script_reference.no_advantage;
-        }
-        else
-        {
-            border.color = curses_script_reference.advantage;
-        }*/
 
 
         curse_messenger.Raise(sprite_index); // Give sprite_index Curse

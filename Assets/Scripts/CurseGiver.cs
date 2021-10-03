@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CurseGiver : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class CurseGiver : MonoBehaviour
     private Roulette roulette;
     [SerializeField]
     private Image roulette_border;
+    [SerializeField]
+    private TextMeshProUGUI roulette_description_text;
 
     private Curses curses_script_reference;
 
@@ -31,6 +34,8 @@ public class CurseGiver : MonoBehaviour
         */
 
         bool advantageRandom = Random.Range(0, 2) == 1;
+
+        Debug.Log(advantageRandom);
 
         int percentage = Random.Range(1,11);
         percentage *= 5;
@@ -93,6 +98,7 @@ public class CurseGiver : MonoBehaviour
                 break;
         }
 
+        roulette_description_text.text = c.description;
 
         curses_script_reference.curses.Add(c);
         curses_script_reference.UpdateCurses();

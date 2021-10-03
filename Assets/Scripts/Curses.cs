@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Curses : MonoBehaviour
 {
@@ -41,6 +42,8 @@ public class Curses : MonoBehaviour
             {
                 elements_references.border.GetComponent<Image>().color = no_advantage;
             }
+
+            elements_references.description.GetComponent<TextMeshProUGUI>().text = c.description;
         }
     }
 
