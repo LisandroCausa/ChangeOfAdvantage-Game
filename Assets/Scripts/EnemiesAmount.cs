@@ -9,13 +9,16 @@ public class EnemiesAmount : MonoBehaviour
     private GameEvent LevelEnd;
 
     public GameObject slime;
-
-    private int EnemiesToSpawn;
+    
 
     void Start()
     {
-        EnemiesToSpawn = 4;
-        for(int i = 0; i < EnemiesToSpawn; i++)
+        NewMap(4);
+    }
+
+    public void NewMap(int enemies)
+    {
+        for(int i = 0; i < enemies; i++)
         {
             Instantiate(slime, new Vector2(Random.Range(-7.5f,7.5f),Random.Range(-7f,6.5f)), Quaternion.identity).transform.SetParent(this.transform);
         }

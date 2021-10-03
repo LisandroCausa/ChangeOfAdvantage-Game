@@ -11,6 +11,7 @@ public class Transition : MonoBehaviour
     public GameObject AfterLevel_Window;
 
     private bool transitioning;
+    private bool transitioningOut;
     private float alphaBackground;
 
 
@@ -26,9 +27,21 @@ public class Transition : MonoBehaviour
             }
             AfterLevel_Background.color = new Color(AfterLevel_Background.color.r, AfterLevel_Background.color.g, AfterLevel_Background.color.b, alphaBackground);
         }
+        else if(transitioningOut)
+        {
+            alphaBackground -= Time.deltaTime * 1.25f;
+            if(alphaBackground <= 0f)
+            {
+                alphaBackground = 0f;
+                transitioningOut = false;
+            }
+            AfterLevel_Background.color = new Color(AfterLevel_Background.color.r, AfterLevel_Background.color.g, AfterLevel_Background.color.b, alphaBackground);
+            AfterLevel_Canvas.SetActive(false);
+        }
         else if(AfterLevel_Canvas.activeSelf)
         {
             AfterLevel_Window.SetActive(true);
+            //AfterLevel_Window.GetComponentInChildren<Button>().interactable = true;
         }
     }
 
@@ -40,5 +53,12 @@ public class Transition : MonoBehaviour
         alphaBackground = 0;
 
         transitioning = true;
+    }
+
+    public void DoTransitionOut()
+    {
+        AfterLevel_Window.SetActive(false);
+
+        transitioningOut = true;
     }
 }

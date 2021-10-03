@@ -10,10 +10,8 @@ public class Curses : MonoBehaviour
 
     public GameObject curseTemplate;
 
-    [SerializeField]
-    private Color advantage;
-    [SerializeField]
-    private Color no_advantage;
+    public Color advantage;
+    public Color no_advantage;
 
     void Update()
     {
