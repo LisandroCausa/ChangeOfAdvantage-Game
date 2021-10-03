@@ -26,6 +26,7 @@ public class EnemiesAmount : MonoBehaviour
         if(transform.childCount == 0)
         {
             Debug.Log("WIN");
+            LevelEnd.Raise();
         }
     }
 }

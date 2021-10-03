@@ -8,18 +8,23 @@ public class PlayerAttack : MonoBehaviour
     public LayerMask Enemy_Layer;
     public Transform HitZone;
 
+    public bool canAttack = true;
+
     private Animator animator;
     private int previousHorizontal;
     private int previousVertical;
 
-    private bool canAttack = true;
+    private bool attack_is_available = true;
 
     // STATS
 
     private float attackSpeed = 1f;
+    private float attackDamage = 5f;
     private float attackRange = 1.5f;
 
     ////////
+
+
 
     void Awake()
     {
@@ -49,9 +54,9 @@ public class PlayerAttack : MonoBehaviour
         }
 
 
-        if((Input.GetAxisRaw("Fire1") == 1 || Input.GetKey(KeyCode.Space)) && canAttack)
+        if((Input.GetAxisRaw("Fire1") == 1 || Input.GetKey(KeyCode.Space)) && attack_is_available && canAttack)
         {
-            canAttack = false;
+            attack_is_available = false;
             StartCoroutine(attackWait(attackSpeed));
             Attack();
         }
@@ -60,7 +65,7 @@ public class PlayerAttack : MonoBehaviour
     IEnumerator attackWait(float time)
     {
         yield return new WaitForSeconds(time);
-        canAttack = true;
+        attack_is_available = true;
     }
 
     void Attack()
@@ -71,7 +76,7 @@ public class PlayerAttack : MonoBehaviour
         {
             foreach(Collider2D enemy in enemiesHit)
             {
-                Destroy(enemy.gameObject);
+                enemy.GetComponent<Enemy>().Hurt(attackDamage);
             }
         }
 
@@ -81,4 +86,5 @@ public class PlayerAttack : MonoBehaviour
     {
         Gizmos.DrawWireSphere(HitZone.position, attackRange/6);
     }
+
 }

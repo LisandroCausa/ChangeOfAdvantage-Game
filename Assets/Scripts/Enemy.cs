@@ -19,9 +19,11 @@ public class Enemy : MonoBehaviour
     private float min_moveSpeed = 1.7f;
     private float max_moveSpeed = 3.7f;
 
-    private float attackRange = 1.5f;
+    private float attackRange = 1f;
     private float attackSpeed = 0.5f;
     private float attackDamage = 3f;
+
+    private float Health = 10f;
 
     /////////
 
@@ -47,12 +49,16 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        if(Health <= 0)
+        {
+            Destroy(this.gameObject);
+        }
+
         enemyVector2 = new Vector2(transform.position.x, transform.position.y);
         playerVector2 = new Vector2(player_position.position.x, player_position.position.y);
 
         if(Vector2.Distance(enemyVector2, playerVector2) > attackRange)
         {
-            //transform.position = Vector2.MoveTowards(transform.position, player_position.position, moveSpeed * Time.deltaTime);
             AI.canMove = true;
         }
         else
@@ -91,5 +97,11 @@ public class Enemy : MonoBehaviour
     {
         Debug.Log("Attack!");
         AttackPlayerEvent.Raise(attackDamage);
+    }
+
+    public void Hurt(float damage)
+    {
+        Health -= damage;
+        // Do Animation
     }
 }

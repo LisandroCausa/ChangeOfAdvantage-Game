@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
 
+    public bool canMove = true;
+
     private Rigidbody2D rb;
     private Animator animator;
 
@@ -12,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField]
     private float moveSpeed;
+
 
     void Awake()
     {
@@ -23,6 +26,10 @@ public class PlayerMovement : MonoBehaviour
     {
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
+        if(canMove == false)
+        {
+            movement = new Vector2(0, 0); // No movement
+        }
 
         animator.SetFloat("Horizontal", movement.x);
         animator.SetFloat("Vertical", movement.y);
@@ -38,7 +45,6 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         rb.velocity = new Vector2(movement.x * moveSpeed * Time.fixedDeltaTime, movement.y * moveSpeed * Time.fixedDeltaTime);
-        //rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
     }
 
 }
