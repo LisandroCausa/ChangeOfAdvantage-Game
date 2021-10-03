@@ -9,7 +9,7 @@ public class EnemiesAmount : MonoBehaviour
     private GameEvent LevelEnd;
 
     public GameObject slime;
-    
+
 
     void Start()
     {
@@ -20,7 +20,7 @@ public class EnemiesAmount : MonoBehaviour
     {
         for(int i = 0; i < enemies; i++)
         {
-            Instantiate(slime, new Vector2(Random.Range(-7.5f,7.5f),Random.Range(-7f,6.5f)), Quaternion.identity).transform.SetParent(this.transform);
+            Instantiate(slime, new Vector2(Random.Range(-7.5f, 7.5f),Random.Range(-5.5f, 7f)), Quaternion.identity).transform.SetParent(this.transform);
         }
     }
 

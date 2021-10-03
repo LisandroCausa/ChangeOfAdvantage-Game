@@ -13,13 +13,7 @@ public class Curses : MonoBehaviour
     public Color advantage;
     public Color no_advantage;
 
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Y))
-        {
-            DeleteOldCurses();
-        }
-    }
+
 
     public void UpdateCurses()
     {
@@ -32,7 +26,9 @@ public class Curses : MonoBehaviour
         foreach(Curse c in curses)
         {
             var newCurse = Instantiate(curseTemplate, transform.position, Quaternion.identity);
-            newCurse.GetComponent<RectTransform>().position = new Vector2(-675, 200 - 170 * curses.IndexOf(c));
+            newCurse.transform.SetParent(this.transform);
+            newCurse.GetComponent<RectTransform>().localPosition = new Vector2(-675, 200 - 170 * curses.IndexOf(c));
+            newCurse.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
 
             var elements_references = newCurse.GetComponent<Curse_UI_Elements_Reference>();
             elements_references.sprite.GetComponent<Image>().sprite = c.sprite;

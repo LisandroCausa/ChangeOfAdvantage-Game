@@ -5,13 +5,20 @@ using UnityEngine;
 public class Map : MonoBehaviour
 {
 
-    public GameObject door;
+    public GameObject Door;
     public GameObject WinZone;
 
 
+    public void LevelStart()
+    {
+        Door.SetActive(true);
+        WinZone.SetActive(false);
+    }
+
     public void LevelEnd()
     {
-        Destroy(door);
+        Door.SetActive(false);
         WinZone.SetActive(true);
     }
+
 }

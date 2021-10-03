@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using ScriptableObjectArchitecture;
 
 public class Roulette : MonoBehaviour
 {
@@ -9,14 +10,18 @@ public class Roulette : MonoBehaviour
 
     private AudioSource audio_source;
     private Image image;
-    [SerializeField]
-    private Image border;
+
+    /*[SerializeField]
+    private Image border;*/
 
     private int sprite_index;
     private int previous_sprite_index = -666;
 
     public Button next_button;
     public Curses curses_script_reference;
+
+    [SerializeField]
+    private IntGameEvent curse_messenger;
 
 
     void Awake()
@@ -38,7 +43,7 @@ public class Roulette : MonoBehaviour
 
     IEnumerator spinCoroutine()
     {
-        for(int i = 0; i < 22; i++)
+        for(int i = 0; i < 21; i++)
         {
             do
             {
@@ -50,7 +55,7 @@ public class Roulette : MonoBehaviour
             yield return new WaitForSeconds(0.10f);
         }
 
-        if(Random.Range(0,2) == 0)
+        /*if(Random.Range(0,2) == 0)
         {
             // Bad
             border.color = curses_script_reference.no_advantage;
@@ -58,8 +63,11 @@ public class Roulette : MonoBehaviour
         else
         {
             border.color = curses_script_reference.advantage;
-        }
-        // Give sprite_index Curse
+        }*/
+
+
+        curse_messenger.Raise(sprite_index); // Give sprite_index Curse
+
 
         next_button.interactable = true;
     }

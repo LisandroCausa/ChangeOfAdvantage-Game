@@ -1,16 +1,100 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CurseGiver : MonoBehaviour
 {
-    void Start()
+
+    [SerializeField]
+    private Roulette roulette;
+    [SerializeField]
+    private Image roulette_border;
+
+    private Curses curses_script_reference;
+
+    void Awake()
     {
-        
+        curses_script_reference = GetComponent<Curses>();   
     }
 
-    void Update()
+
+    public void GetNewCurse(int index)
     {
-        //if()
+        curses_script_reference.DeleteOldCurses();
+
+        /*
+
+            0 = Sword (Attack Damage)
+            1 = Heart (Health)
+
+        */
+
+        bool advantageRandom = Random.Range(0, 2) == 1;
+
+        int percentage = Random.Range(1,11);
+        percentage *= 5;
+
+        if(advantageRandom == false) percentage = -percentage;
+
+        if(index == 1)
+        {
+            if(advantageRandom)
+            {
+                percentage = 50;
+            }
+            else
+            {
+                percentage = -50;
+            }
+        }
+
+
+        // Do border effect
+        if(advantageRandom)
+        {
+            roulette_border.color = curses_script_reference.advantage;
+        }
+        else
+        {
+            roulette_border.color = curses_script_reference.no_advantage;
+        }
+
+
+        Curse c = new Curse{
+            sprite = roulette.sprites[index],
+            isAdvantage = advantageRandom,
+            duration = 1
+        };
+
+        switch(index)
+        {
+            case 0:
+                c.damage += percentage;
+                if(advantageRandom)
+                {
+                    c.description = "You gain %" + percentage.ToString() + " of your Damage.";
+                }
+                else
+                {
+                    c.description = "You lose %" + (-percentage).ToString() + " of your Damage.";
+                }
+                break;
+            case 1:
+                c.health += percentage;
+                if(advantageRandom)
+                {
+                    c.description = "You gain %" + percentage.ToString() + " of your Max Health.";
+                }
+                else
+                {
+                    c.description = "You lose %" + (-percentage).ToString() + " of your Max Health.";
+                }
+                break;
+        }
+
+
+        curses_script_reference.curses.Add(c);
+        curses_script_reference.UpdateCurses();
     }
 }
