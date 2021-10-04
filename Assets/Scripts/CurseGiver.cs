@@ -30,28 +30,36 @@ public class CurseGiver : MonoBehaviour
 
             0 = Sword (Attack Damage)
             1 = Heart (Health)
+            2 = Slime_Speed
 
         */
 
         bool advantageRandom = Random.Range(0, 2) == 1;
 
-        Debug.Log(advantageRandom);
+        //if(LevelManager.round > 4) advantageRandom = Random.Range(0,5) > 2; AGREGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAR
 
-        int percentage = Random.Range(1,11);
-        percentage *= 5;
+
+        int percentage = Random.Range(2,9);
+        percentage *= 10;
 
         if(advantageRandom == false) percentage = -percentage;
 
         if(index == 1)
         {
+            percentage = 50;
+            if(!advantageRandom) percentage = -50;
+        }
+        else if(index == 2)
+        {
             if(advantageRandom)
             {
-                percentage = 50;
+                percentage = Random.Range(2,10);
             }
             else
             {
-                percentage = -50;
+                percentage = Random.Range(-25,-2);
             }
+            percentage *= 10;
         }
 
 
@@ -67,33 +75,50 @@ public class CurseGiver : MonoBehaviour
 
 
         Curse c = new Curse{
+            curse_index = index,
             sprite = roulette.sprites[index],
             isAdvantage = advantageRandom,
             duration = 1
         };
 
+        if(LevelManager.round > 2) //&& Random.Range(0,3) > 0)
+        {
+            c.duration += Random.Range(1,3);
+        }
+
         switch(index)
         {
             case 0:
-                c.damage += percentage;
+                c.damage = percentage;
                 if(advantageRandom)
                 {
-                    c.description = "You gain %" + percentage.ToString() + " of your Damage.";
+                    c.description = "You gain %" + percentage.ToString() + " of your Damage";
                 }
                 else
                 {
-                    c.description = "You lose %" + (-percentage).ToString() + " of your Damage.";
+                    c.description = "You lose %" + (-percentage).ToString() + " of your Damage";
                 }
                 break;
             case 1:
-                c.health += percentage;
+                c.health = percentage;
                 if(advantageRandom)
                 {
-                    c.description = "You gain %" + percentage.ToString() + " of your Max Health.";
+                    c.description = "You gain %" + percentage.ToString() + " of your Max Health";
                 }
                 else
                 {
-                    c.description = "You lose %" + (-percentage).ToString() + " of your Max Health.";
+                    c.description = "You lose %" + (-percentage).ToString() + " of your Max Health";
+                }
+                break;
+            case 2:
+                c.slime_speed = percentage;
+                if(advantageRandom)
+                {
+                    c.description = "Slimes are %" + percentage.ToString() + " slower";
+                }
+                else
+                {
+                    c.description = "Slimes are %" + (-percentage).ToString() + " faster";
                 }
                 break;
         }

@@ -6,16 +6,19 @@ using ScriptableObjectArchitecture;
 public class PlayerHealth : MonoBehaviour
 {
 
+    // STATIC STATS
+
+    private int initial_maxHealth = 100;
 
     // STATS
 
-    private float maxHealth = 100f;
+    private float maxHealth;
 
     [SerializeField]
     private float Health;
 
-    private float regeneration = 2.25f;
-    private float time_before_regeneration = 2.65f;
+    private float regeneration = 3.25f;
+    private float time_before_regeneration = 2.5f;
 
     ////////
 
@@ -29,14 +32,26 @@ public class PlayerHealth : MonoBehaviour
     private float timer_regeneration;
     private SpriteRenderer sprite;
 
+    [SerializeField]
+    private GameEvent game_over_event;
+
+
+    public static bool game_over;
+
+
+
     void Awake()
     {
         sprite = GetComponent<SpriteRenderer>();
-        Health = maxHealth;
+        ResetGameOver();
     }
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.I))
+        {
+            Debug.Log("ABC: "+(float)40/100);
+        }
         red_color += Time.deltaTime/2;
         if(red_color > 1f)
         {
@@ -51,17 +66,19 @@ public class PlayerHealth : MonoBehaviour
 
         timer_regeneration -= Time.deltaTime;
 
-        if(timer_regeneration <= 0)
+        if(timer_regeneration <= 0 && game_over == false)
         {
             Health += regeneration * Time.deltaTime;
         }
 
-        if(Health > 100)
+        if(Health > maxHealth)
         {
-            Health = 100;
+            Health = maxHealth;
         }
         else if(Health <= 0)
         {
+            if(!game_over) game_over_event.Raise();
+            game_over = true;
             // GAME OVER
         }
 
@@ -80,5 +97,25 @@ public class PlayerHealth : MonoBehaviour
     {
         Health -= damage;
         red_color -= 0.5f;
+    }
+
+    public void ResetGameOver()
+    {
+        game_over = false;
+        maxHealth = initial_maxHealth;
+        Health = maxHealth;
+        red_color = 1f;
+    }
+
+    public void ResetStats()
+    {
+        maxHealth = initial_maxHealth;
+        Health = maxHealth;
+    }
+
+    public void HealthChange(int percentage)
+    {
+        maxHealth = maxHealth + (maxHealth/100) * percentage;
+        Health = maxHealth;
     }
 }

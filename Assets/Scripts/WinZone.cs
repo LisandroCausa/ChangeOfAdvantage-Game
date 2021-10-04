@@ -16,6 +16,7 @@ public class WinZone : MonoBehaviour
             other.gameObject.GetComponent<PlayerMovement>().canMove = false;
             other.gameObject.GetComponent<PlayerAttack>().canAttack = false;
             LevelManager.round++;
+            LevelManager.tutorial = false;
             Transition.Raise();
         }
     }

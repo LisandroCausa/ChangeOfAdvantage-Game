@@ -8,8 +8,10 @@ public class EnemiesAmount : MonoBehaviour
     [SerializeField]
     private GameEvent LevelEnd;
 
-    public GameObject slime;
 
+    private bool eventWasSended;
+
+    public GameObject slime;
 
     void Start()
     {
@@ -18,6 +20,11 @@ public class EnemiesAmount : MonoBehaviour
 
     public void NewMap(int enemies)
     {
+        foreach(Transform t in this.transform)
+        {
+            Destroy(t.gameObject);
+        }
+
         for(int i = 0; i < enemies; i++)
         {
             Instantiate(slime, new Vector2(Random.Range(-7.5f, 7.5f),Random.Range(-5.5f, 7f)), Quaternion.identity).transform.SetParent(this.transform);
@@ -26,10 +33,14 @@ public class EnemiesAmount : MonoBehaviour
 
     void Update()
     {
-        if(transform.childCount == 0)
+        if(transform.childCount == 0 && eventWasSended == false)
         {
-            Debug.Log("WIN");
+            eventWasSended = true;
             LevelEnd.Raise();
+        }
+        else if(transform.childCount > 0)
+        {
+            eventWasSended = false;
         }
     }
 }

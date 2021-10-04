@@ -12,8 +12,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 movement;
 
-    [SerializeField]
-    private float moveSpeed;
+    private float moveSpeed = 220;
 
 
     void Awake()
@@ -26,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     {
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
-        if(canMove == false)
+        if(canMove == false || PlayerHealth.game_over == true)
         {
             movement = new Vector2(0, 0); // No movement
         }

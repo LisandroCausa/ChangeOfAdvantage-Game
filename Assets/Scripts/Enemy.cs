@@ -15,13 +15,16 @@ public class Enemy : MonoBehaviour
     private Vector2 enemyVector2;
     private Vector2 playerVector2;
 
+    // STATIC STATS
+
+    private float min_moveSpeed = 1.5f;
+    private float max_moveSpeed = 3.6f;
+
     // STATS
-    private float min_moveSpeed = 1.7f;
-    private float max_moveSpeed = 3.7f;
 
     private float attackRange = 1f;
     private float attackSpeed = 0.5f;
-    private float attackDamage = 3f;
+    private float attackDamage = 1.75f;
 
     private float Health = 10f;
 
@@ -29,21 +32,28 @@ public class Enemy : MonoBehaviour
 
     private bool canAttack = true;
     private bool X_direction;
+    private SpriteRenderer sprite;
+    private float red_intensity = 1f;
+    private AudioSource audio_hit;
 
 
 
     private AIDestinationSetter destination;
     private AIPath AI;
 
-    void Awake()
+    void Start()
     {
+        audio_hit = GetComponent<AudioSource>();
+        sprite = GetComponent<SpriteRenderer>();
         destination = GetComponent<AIDestinationSetter>();
         AI = GetComponent<AIPath>();
         player_position = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 
         destination.target = player_position;
-        AI.maxSpeed = Random.Range(min_moveSpeed, max_moveSpeed);
 
+        Debug.Log("Enemy: "+ Curses.Enemy_SpeedMultiplier);
+        AI.maxSpeed = Random.Range(min_moveSpeed, max_moveSpeed) * Curses.Enemy_SpeedMultiplier;
+        if(LevelManager.tutorial) attackDamage = 0.5f;
     }
     
 
@@ -51,8 +61,12 @@ public class Enemy : MonoBehaviour
     {
         if(Health <= 0)
         {
-            Destroy(this.gameObject);
+            Health = 1000;
+            attackSpeed = 10f;
+            canAttack = false;
+            StartCoroutine(WaitForDeath());
         }
+
 
         enemyVector2 = new Vector2(transform.position.x, transform.position.y);
         playerVector2 = new Vector2(player_position.position.x, player_position.position.y);
@@ -83,7 +97,22 @@ public class Enemy : MonoBehaviour
         {
             transform.localScale = new Vector3(-0.8f, 0.8f, 1);
         }
+        
 
+        if(red_intensity >= 1)
+        {
+            red_intensity = 1;
+        }
+        else
+        {
+            red_intensity += Time.deltaTime * 2.35f;
+            if(red_intensity >= 1)
+            {
+            red_intensity = 1;
+            }
+            sprite.color = new Color(1, red_intensity, red_intensity);
+
+        }
     }
 
     IEnumerator attackWait(float time)
@@ -92,16 +121,29 @@ public class Enemy : MonoBehaviour
         canAttack = true;
     }
 
+    IEnumerator WaitForDeath()
+    {
+        transform.SetParent(null);
+        GetComponent<Animator>().enabled = false;
+        sprite.sprite = null;
+        GetComponent<BoxCollider2D>().enabled = false;
+        AI.canMove = false;
+        yield return new WaitForSeconds(1f);
+        Destroy(this.gameObject);
+    }
 
     void Attack()
     {
-        Debug.Log("Attack!");
         AttackPlayerEvent.Raise(attackDamage);
     }
 
     public void Hurt(float damage)
     {
         Health -= damage;
+        red_intensity = 0;
+        audio_hit.pitch = Random.Range(0.8f, 1.3f);
+        audio_hit.Play();
         // Do Animation
+
     }
 }

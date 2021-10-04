@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour
 {
 
     public static int round = 1;
+    private int enemies = 1;
 
     public EnemiesAmount enemiesManager;
     public Transform Player;
@@ -14,10 +15,14 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private GameEvent map_start;
 
+    public static bool tutorial = true;
 
     public void NextLevel()
     {
-        enemiesManager.NewMap(round+3);
+        enemies++;
+        if(Random.Range(1, round+5) < 5) enemies += round * Random.Range(1, 3);
+
+        enemiesManager.NewMap(enemies+3);
         Player.transform.position = new Vector2(0, -4.5f);
         Player.GetComponent<PlayerMovement>().canMove = true;
         Player.GetComponent<PlayerAttack>().canAttack = true;
@@ -25,6 +30,12 @@ public class LevelManager : MonoBehaviour
         // RESET WIN ZONE
         map_start.Raise();
         // CLOSE DOOR
+    }
+
+    public void RestartGame()
+    {
+        enemies = 0;
+        NextLevel();
     }
 
 }

@@ -56,7 +56,6 @@ public class Roulette : MonoBehaviour
         }
 
 
-
         curse_messenger.Raise(sprite_index); // Give sprite_index Curse
 
 

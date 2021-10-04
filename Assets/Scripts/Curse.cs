@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Curse
 {
-
+    public int curse_index;
     public Sprite sprite;
 
     public bool isAdvantage;
@@ -13,7 +13,6 @@ public class Curse
     public string description;
 
     public int duration = 1; // In number of Rounds
-
 
 
     [Space,Header("Changes in %")]
@@ -27,4 +26,5 @@ public class Curse
 
     // Other
     public int health;
+    public int slime_speed;
 }
